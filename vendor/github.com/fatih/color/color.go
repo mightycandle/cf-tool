@@ -480,7 +480,7 @@ func Yellow(format string, a ...interface{}) { colorPrint(format, FgYellow, a...
 
 // Blue is a convenient helper function to print with blue foreground. A
 // newline is appended to format by default.
-func Blue(format string, a ...interface{}) { colorPrint(format, FgBlue, a...) }
+func Blue(format string, a ...interface{}) { colorPrint(format, FgCyan, a...) }
 
 // Magenta is a convenient helper function to print with magenta foreground.
 // A newline is appended to format by default.
@@ -512,7 +512,7 @@ func YellowString(format string, a ...interface{}) string { return colorString(f
 
 // BlueString is a convenient helper function to return a string with blue
 // foreground.
-func BlueString(format string, a ...interface{}) string { return colorString(format, FgBlue, a...) }
+func BlueString(format string, a ...interface{}) string { return colorString(format, FgCyan, a...) }
 
 // MagentaString is a convenient helper function to return a string with magenta
 // foreground.
@@ -546,7 +546,7 @@ func HiYellow(format string, a ...interface{}) { colorPrint(format, FgHiYellow, 
 
 // HiBlue is a convenient helper function to print with hi-intensity blue foreground. A
 // newline is appended to format by default.
-func HiBlue(format string, a ...interface{}) { colorPrint(format, FgHiBlue, a...) }
+func HiBlue(format string, a ...interface{}) { colorPrint(format, FgHiCyan, a...) }
 
 // HiMagenta is a convenient helper function to print with hi-intensity magenta foreground.
 // A newline is appended to format by default.
@@ -584,7 +584,7 @@ func HiYellowString(format string, a ...interface{}) string {
 
 // HiBlueString is a convenient helper function to return a string with hi-intensity blue
 // foreground.
-func HiBlueString(format string, a ...interface{}) string { return colorString(format, FgHiBlue, a...) }
+func HiBlueString(format string, a ...interface{}) string { return colorString(format, FgHiCyan, a...) }
 
 // HiMagentaString is a convenient helper function to return a string with hi-intensity magenta
 // foreground.

@@ -61,9 +61,9 @@ func plain(raw []byte) string {
 	return b.String()
 }
 
-func judge(sampleID, command string) error {
-	inPath := fmt.Sprintf("in%v.txt", sampleID)
-	ansPath := fmt.Sprintf("ans%v.txt", sampleID)
+func judge(sampleID, command string, all_pass *bool) error {
+	inPath := fmt.Sprintf("test%v.in", sampleID)
+	ansPath := fmt.Sprintf("test%v.out", sampleID)
 	input, err := os.Open(inPath)
 	if err != nil {
 		return err
@@ -115,6 +115,7 @@ func judge(sampleID, command string) error {
 
 	state := ""
 	diff := ""
+	// all_pass := "true"
 	if out == ans {
 		state = color.New(color.FgGreen).Sprintf("Passed #%v", sampleID)
 	} else {
@@ -122,17 +123,21 @@ func judge(sampleID, command string) error {
 		if err != nil {
 			return err
 		}
+		if input == nil{
+			return err
+		}
 		state = color.New(color.FgRed).Sprintf("Failed #%v", sampleID)
 		dmp := diffmatchpatch.New()
 		d := dmp.DiffMain(out, ans, true)
-		diff += color.New(color.FgCyan).Sprintf("-----Input-----\n")
-		diff += string(input) + "\n"
+		// diff += color.New(color.FgCyan).Sprintf("-----Input-----\n")
+		// diff += string(input) + "\n"
 		diff += color.New(color.FgCyan).Sprintf("-----Output-----\n")
 		diff += dmp.DiffText1(d) + "\n"
 		diff += color.New(color.FgCyan).Sprintf("-----Answer-----\n")
 		diff += dmp.DiffText2(d) + "\n"
 		diff += color.New(color.FgCyan).Sprintf("-----Diff-----\n")
 		diff += dmp.DiffPrettyText(d) + "\n"
+		*all_pass = false
 	}
 
 	parseMemory := func(memory uint64) string {
@@ -145,6 +150,15 @@ func judge(sampleID, command string) error {
 	}
 
 	ansi.Printf("%v ... %.3fs %v\n%v", state, cmd.ProcessState.UserTime().Seconds(), parseMemory(maxMemory), diff)
+	// if all_pass == "true"{
+		// d := color.boldGreen.Sprintf("Pretests Passed")
+		// ansi.Printf("%v\n");
+	// } else{
+		// d := color.boldRed.Sprintf("Pretests Failed")
+		// ansi.Printf("%v\n");
+	// }
+
+    
 	return nil
 }
 
@@ -191,13 +205,26 @@ func Test() (err error) {
 	if err = run(template.BeforeScript); err != nil {
 		return
 	}
+	all_pass := true
 	if s := filter(template.Script); len(s) > 0 {
 		for _, i := range samples {
-			err := judge(i, s)
+			err := judge(i, s, &all_pass)
 			if err != nil {
 				color.Red(err.Error())
 			}
 		}
+		red := color.New(color.FgRed)
+		boldRed := red.Add(color.Bold)
+
+		green := color.New(color.FgGreen)
+		boldGreen := green.Add(color.Bold)
+
+		if all_pass == true {
+			boldGreen.Println("\nPretests Passed");
+		} else {
+			boldRed.Println("Pretests Failed");
+		}
+		// boldRed.Println("This will print text in bold red.")
 	} else {
 		return errors.New("Invalid script command. Please check config file")
 	}

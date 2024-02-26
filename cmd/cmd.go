@@ -64,13 +64,13 @@ func getSampleID() (samples []string) {
 	if err != nil {
 		return
 	}
-	reg := regexp.MustCompile(`in(\d+).txt`)
+	reg := regexp.MustCompile(`test(\d+).in`)
 	for _, path := range paths {
 		name := path.Name()
 		tmp := reg.FindSubmatch([]byte(name))
 		if tmp != nil {
 			idx := string(tmp[1])
-			ans := fmt.Sprintf("ans%v.txt", idx)
+			ans := fmt.Sprintf("test%v.out", idx)
 			if _, err := os.Stat(ans); err == nil {
 				samples = append(samples, idx)
 			}
